@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		749175AD2DEDFABC0011C1E0 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 749175AC2DEDFAB00011C1E0 /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		749175682DEDF76D0011C1E0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		7491755A2DEDF76C0011C1E0 /* StudyFit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StudyFit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		749175672DEDF76D0011C1E0 /* StudyFitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StudyFitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		749175712DEDF76D0011C1E0 /* StudyFitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StudyFitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		749175AC2DEDFAB00011C1E0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +80,7 @@
 		749175512DEDF76C0011C1E0 = {
 			isa = PBXGroup;
 			children = (
+				749175AC2DEDFAB00011C1E0 /* README.md */,
 				7491755C2DEDF76C0011C1E0 /* StudyFit */,
 				7491756A2DEDF76D0011C1E0 /* StudyFitTests */,
 				749175742DEDF76D0011C1E0 /* StudyFitUITests */,
@@ -212,6 +218,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				749175AD2DEDFABC0011C1E0 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
