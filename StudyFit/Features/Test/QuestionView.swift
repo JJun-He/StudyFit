@@ -2,6 +2,82 @@
 //  QuestionView.swift
 //  StudyFit
 //
-//  Created by 임뚱보 on 6/15/25.
+//
 //
 
+
+import SwiftUI
+
+struct QuestionView: View{
+    let question: Question
+    @Binding var selectedAnswer: String?
+    
+    var body: some View{
+        VStack(alignment: .leading, spacing: 24){
+            // 질문 텍스트
+            Text(question.text)
+                .font(.title2)
+                .fontWeight(.semibold)
+                .foregroundColor(.primary)
+                .multilineTextAlignment(.leading)
+                .padding(.horizontal)
+            
+            // 답변 옵션들
+            LazyVStack(spacing: 12){
+                ForEach(question.options, id:\.self){option in
+                    AnswerOptionView(
+                        text: option,
+                        isSelected: selectedAnswer == option,
+                        action: {
+                            selectedAnswer = option
+                        }
+                    )
+                }
+            }
+            .padding(.horizontal)
+            
+            Spacer()
+        }
+        .padding(.vertical)
+    }
+}
+
+struct AnswerOptionView: View{
+    let text: String
+    let isSelected: Bool
+    let action: () -> Void
+    
+    var body: some View{
+        Button(action: action){
+            HStack{
+                Text(text)
+                    .font(.body)
+                    .foregroundColor(isSelected ? .white: .primary)
+                    .multilineTextAlignment(.leading)
+                
+                Spacer()
+                
+                if isSelected{
+                    Image(systemName: "checkmark.cirle.fill")
+                        .foregroundColor(.white)
+                        .font(.title3)
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(isSelected ? Color.blue: Color.gray.opacity(0.1))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(isSelected ? Color.blue: Color.clear, lineWidth: 2)
+            )
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
+
+#Preview {
+    QuestionView(question: Question.sampleQuestions[0], selectedAnswer: .constant(nil))
+}
