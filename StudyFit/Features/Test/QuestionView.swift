@@ -11,6 +11,7 @@ import SwiftUI
 struct QuestionView: View{
     let question: Question
     @Binding var selectedAnswer: String?
+    let onAnswerSelected: ((String) -> Void)? // 콜백 추가
     
     var body: some View{
         VStack(alignment: .leading, spacing: 24){
@@ -30,6 +31,7 @@ struct QuestionView: View{
                         isSelected: selectedAnswer == option,
                         action: {
                             selectedAnswer = option
+                            onAnswerSelected?(option) // 콜백 호출
                         }
                     )
                 }
@@ -79,5 +81,9 @@ struct AnswerOptionView: View{
 }
 
 #Preview {
-    QuestionView(question: Question.sampleQuestions[0], selectedAnswer: .constant(nil))
+    QuestionView(question: Question.sampleQuestions[0], selectedAnswer: .constant(nil),
+                 onAnswerSelected: {answer in
+        print("Preview에서 선택된 답변: \(answer)")
+    }
+ )
 }

@@ -14,7 +14,9 @@ class TestViewModel: ObservableObject {
     @Published var answers: [Int: String] = [:] // 질문 ID: 선택한 답변
     @Published var isTestCompleted = false
     @Published var testResult: StudyResult?
+    @Published var isLoading = false
     
+    // 계산 속성들
     var currentQuestion: Question? {
         guard currentQuestionIndex < questions.count else { return nil }
         return questions[currentQuestionIndex]
@@ -30,19 +32,42 @@ class TestViewModel: ObservableObject {
         return answers[currentQuestion.id] != nil
     }
     
+    var canGoPrevious: Bool {
+        return currentQuestionIndex > 0
+    }
+    
+    var isFirstQuestion: Bool {
+        return currentQuestionIndex == 0
+    }
+    
+    var isLastQuestion: Bool {
+        return currentQuestionIndex == questions.count - 1
+    }
+    
     init() {
         loadQuestions()
     }
     
+    // MARK: - 질문 로드
     func loadQuestions() {
+        isLoading = true
+        // 실제로는 API나 로컬 파일에서 로드하겠지만, 지금은 샘플 데이터 사용
         questions = Question.sampleQuestions
+        isLoading = false
     }
     
+    // MARK: - 답변 선택
     func selectAnswer(_ answer:String){
         guard let currentQuestion = currentQuestion else { return }
         answers[currentQuestion.id] = answer
+        
+        // 답변 선택 후 약간의 지연 후 자동으로 다음 질문으로
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.nextQuestion()
+        }
     }
     
+    // MARK: -네비게이션
     func nextQuestion() {
         if currentQuestionIndex < questions.count - 1 {
             currentQuestionIndex += 1
@@ -57,12 +82,21 @@ class TestViewModel: ObservableObject {
         }
     }
     
+    // MARK: - 테스트 완료
     private func completeTest() {
+        isLoading = true
+        
+        // 실제로는 서버에서 분석하겠지만, 지금은 로컬에서 계산
         let result = calculateTestResult()
-        testResult = result
-        isTestCompleted = true
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.testResult = result
+            self.isTestCompleted = true
+            self.isLoading = false
+        }
     }
     
+    // MARK: -점수 계산 로직
     private func calculateTestResult() -> StudyResult {
         var scores: [String: Int] = [
             "examFocused": 0,
@@ -89,11 +123,28 @@ class TestViewModel: ObservableObject {
         )
     }
     
+    // MARK: - 테스트 리셋
     func resetTest() {
         currentQuestionIndex = 0
         answers.removeAll()
         isTestCompleted = false
         testResult = nil
+        isLoading = false
+    }
+    
+    // MARK: - 특정 질문으로 이동
+    func goToQuestion(at index: Int) {
+        guard index >= 0 && index < questions.count else { return }
+        currentQuestionIndex = index
+    }
+    
+    // MARK: - 답변 상태 체크
+    func isAnswered(questionId: Int) -> Bool{
+        return answers[questionId] != nil
+    }
+    
+    func getAnswer(for questionId: Int) -> String? {
+        return answers[questionId]
     }
 }
 
