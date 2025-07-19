@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @State private var showingTest = false
     @State private var lastTestResult: StudyResult?
+    @State private var testCount = 0
     
     var body: some View {
         NavigationView {
@@ -40,13 +41,57 @@ struct HomeView: View {
             TestView()
         }
         .onAppear {
-            loadLastTestResult()
+            loadUserData()
+        }
+        // 테스트 화면에서 돌아왔을 때 데이터 새로고침
+        .refreshable {
+            loadUserData()
         }
     }
     
-    private func loadLastTestResult() {
-        // User Defaults에서 마지막 테스트 결과 로드
-        // 나중에 구현
+    // 사용자 데이터 로드
+    private func loadUserData() {
+        lastTestResult = UserDefaultsManager.getLastTestResult()
+        testCount = UserDefaultsManager.getTestCount()
+        print("HomeView 데이터 로드: 마지막 결과 \(lastTestResult?.personalityType.displayName ?? "없음"), 총 \(testCount)회")
+    }
+}
+
+// 통계 섹션
+struct TestStatisticsSection: View{
+    let testCount: Int
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12){
+            Text("나의 테스트 통계")
+                .font(.headline)
+                .fontWeight(.semibold)
+            
+            HStack{
+                VStack(alignment: .leading, spacing: 4){
+                    Text("총 테스트 횟수")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                    
+                    Text("\(testCount)회")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.blue)
+                }
+                
+                Spacer()
+                
+                Button("기록 보기"){
+                    // 나중에 구현: 전체 테스트 기록 보기
+                }
+                .buttonStyle(.bordered)
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.orange.opacity(0.1))
+        )
     }
 }
 
@@ -124,6 +169,7 @@ struct TestStartSection: View {
 
 struct PreviousResultSection: View {
     let result: StudyResult
+    @State private var showingResult = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12){
@@ -137,15 +183,16 @@ struct PreviousResultSection: View {
                         .font(.subheadline)
                         .fontWeight(.medium)
                     
-                    Text(DateFormatter.localizedString(from: result.timestamp, dateStyle: .medium, timeStyle: .none))
+                    Text(result.timeAgo) // 며칠 전인지 표시
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundColor(.secondary)
                 }
                 
                 Spacer()
                 
                 Button("자세히 보기"){
                     // 결과 화면으로 이동
+                    showingResult = true
                 }
                 .buttonStyle(.bordered)
             }
@@ -155,6 +202,9 @@ struct PreviousResultSection: View {
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.green.opacity(0.1))
         )
+        .sheet(isPresented: $showingResult){
+            ResultView(result: result)
+        }
     }
 }
 

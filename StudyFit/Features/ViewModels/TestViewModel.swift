@@ -93,6 +93,9 @@ class TestViewModel: ObservableObject {
             self.testResult = result
             self.isTestCompleted = true
             self.isLoading = false
+            
+            // 결과 저장 추가
+            UserDefaultsManager.saveTestResults(result)
         }
     }
     

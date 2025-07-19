@@ -7,14 +7,37 @@
 
 import Foundation
 
-struct StudyResult{
+struct StudyResult: Codable{
     let personalityType: StudyPersonalityType
     let score: [String: Int]
     let recommendations: [String]
     let timestamp: Date
+    
+    // 사용자 친화적인 날짜 표시
+    var displayDate: String{
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter.string(from: timestamp)
+    }
+    
+    // 며칠 전인지 표시
+    var timeAgo: String{
+        let calendar = Calendar.current
+        let now = Date()
+        
+        if calendar.isDateInToday(timestamp){
+            return "오늘"
+        }else if calendar.isDateInYesterday(timestamp){
+            return "어제"
+        }else{
+            let days = calendar.dateComponents([.day], from: timestamp, to: now).day ?? 0
+            return "\(days)일 전"
+        }
+    }
 }
 
-enum StudyPersonalityType: String, CaseIterable, Identifiable{
+enum StudyPersonalityType: String, CaseIterable, Identifiable, Codable{
     case examFocused = "exam_focused" // 시험형
     case conceptMaster = "concept_master" // 개념형
     case problemSolver = "problem_solver" // 문제형
