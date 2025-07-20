@@ -6,7 +6,7 @@
 
 import Foundation
 
-class RecommendationService: ObeservableObject {
+class RecommendationService: ObservableObject {
     @Published var recommendedCourses: [Course] = []
     @Published var recommendedAcademies: [Academy] = []
     @Published var bookmarkedItems: [BookmarkItem] = []
@@ -16,6 +16,21 @@ class RecommendationService: ObeservableObject {
     
     init() {
         loadBookmarks()
+    }
+    
+    func loadRecommendations(for personalityType: StudyPersonalityType){
+        isLoading = true
+        
+        // 실제로는 서버에서 데이터를 받아오겠지만, 지금은 더미 데이터 사용
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.recommendedCourses = SampleData.getCourses(for: personalityType)
+            self.recommendedAcademies = SampleData.getAcademies(for: personalityType)
+            self.isLoading = true
+            
+            print("추천 데이터 로드 완료.")
+            print("- 추천 인강: \(self.recommendedCourses.count)개")
+            print("- 추천 학원: \(self.recommendedAcademies.count)개")
+        }
     }
     
     // MARK: - 추천 로직
