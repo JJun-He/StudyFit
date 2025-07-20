@@ -53,7 +53,7 @@ struct Academy: Identifiable, Codable, Hashable{
     let rating : Double
     let reviewCount: Int
     let subjects: [Subject]
-    let specialities: [String]
+    let specialties: [String]
     let priceRange: String
     let description: String
     let imageURLs: [String]
