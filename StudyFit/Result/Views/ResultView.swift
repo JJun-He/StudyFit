@@ -37,7 +37,7 @@ struct ResultView: View {
                     RecommendedTimeSection(personalityType: result.personalityType)
                     
                     // 액션 버튼들
-                    ActionButtonsSection()
+                    ActionButtonsSection(personalityType: result.personalityType)
                     
                     Spacer(minLength: 100)
                 }
@@ -45,6 +45,16 @@ struct ResultView: View {
             }
             .navigationTitle("테스트 결과")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar{
+                ToolbarItem(placement: .navigationBarTrailing){
+                    Button("완료"){
+                        dismiss()
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $showingScoreDetails){
+            //ScoreDetailView(scores: result.score, personalityType: result.personalityType)
         }
     }
 }
@@ -267,10 +277,14 @@ struct RecommendedTimeSection: View {
 }
 
 struct ActionButtonsSection: View {
+    let personalityType: StudyPersonalityType
+    @State private var showingRecommendations = false
+    
     var body: some View {
         VStack(spacing: 12){
             Button(action:{
                 // 추천 인강/ 학원 보기
+                showingRecommendations = true
             }){
                 HStack{
                     Image(systemName: "book.fill")
@@ -313,10 +327,26 @@ struct ActionButtonsSection: View {
                     .cornerRadius(12)
                 }
             }
-            
+        }
+        .sheet(isPresented: $showingRecommendations){
+            // 시트로 추천 화면 표시
+            RecommendationView(personalityType: personalityType)
         }
     }
 }
+
+// MARK: - 액션 함수들
+private func shareResult() {
+    // 결과 공유 기능 (나중에 구현)
+    print("결과 공유하기")
+}
+
+private func restartTest() {
+    // 테스트 다시 시작 가능 (나중에 구현)
+    print("테스트 다시 시작")
+}
+
+
 
 // MARK: - 헬퍼 함수들
 func personalityTypeColor(_ type: StudyPersonalityType) -> Color {

@@ -170,6 +170,7 @@ struct TestStartSection: View {
 struct PreviousResultSection: View {
     let result: StudyResult
     @State private var showingResult = false
+    @State private var showingRecommendations = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12){
@@ -190,11 +191,19 @@ struct PreviousResultSection: View {
                 
                 Spacer()
                 
-                Button("자세히 보기"){
-                    // 결과 화면으로 이동
-                    showingResult = true
+                VStack(spacing: 8){
+                    Button("자세히 보기"){
+                        showingResult = true
+                    }
+                    .buttonStyle(.bordered)
+                    .font(.caption)
+                    
+                    Button("추천 보기"){
+                        showingRecommendations = true
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .font(.caption)
                 }
-                .buttonStyle(.bordered)
             }
         }
         .padding()
@@ -204,6 +213,9 @@ struct PreviousResultSection: View {
         )
         .sheet(isPresented: $showingResult){
             ResultView(result: result)
+        }
+        .sheet(isPresented: $showingRecommendations){
+            RecommendationView(personalityType: result.personalityType)
         }
     }
 }
