@@ -124,10 +124,7 @@ struct AcademyCard: View {
             showingDetail = true
         }
         .sheet(isPresented: $showingDetail){
-            // 임시 상세 화면
-            Text("학원 상세 정보 (준비 중)")
-                .font(.title)
-                .padding()
+            AcademyDetailView(academy: academy)
         }
     }
 }
