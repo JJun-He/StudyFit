@@ -257,7 +257,7 @@ struct BookmarkContentView: View{
                     }
                 case .academies:
                     ForEach(viewModel.bookmarkedAcademies){academy in
-                        BookmarkedAcademy(
+                        BookmarkedAcademyCard(
                             academy: academy,
                             onRemove: {
                                 viewModel.removeBookmark(academyId: academy.id)
