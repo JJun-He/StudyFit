@@ -18,12 +18,30 @@ struct RecommendationView: View {
                 EnhancedSearchBar(searchManager: viewModel.searchManager)
                     .padding(.horizontal)
                 
-                // 필터 및 정렬 바
-                FilterSortBar(viewModel: viewModel)
-                
-                // 세그먼트 컨트롤
+                // 검색 중일 때 상태 표시
+                if viewModel.isSearching{
+                    HStack{
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.blue)
+                        Text("'\(viewModel.searchManager.debouncedSearchText)'검색 중...")
+                            .font(.caption)
+                            .foregroundColor(.blue)
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 4)
+                }
                 
             }
+            .padding(.bottom)
+            .background(Color(.systemBackground))
+            .zIndex(1)
+            
+            // 필터 및 정렬 바
+            FilterSortBar(viewModel: viewModel)
+            
+            // 세그먼트 컨트롤
+            
         }
     }
 }
