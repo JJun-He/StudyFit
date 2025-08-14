@@ -15,10 +15,8 @@ struct RecommendationView: View {
         NavigationView{
             VStack(spacing: 0){
                 // 검색 바
-                SearchBar(text: $viewModel.searchText)
-                    .onSubmit{
-                        viewModel.applySortAndFilter()
-                    }
+                EnhancedSearchBar(searchManager: viewModel.searchManager)
+                    .padding(.horizontal)
                 
                 // 필터 및 정렬 바
                 FilterSortBar(viewModel: viewModel)
@@ -31,26 +29,42 @@ struct RecommendationView: View {
 }
 
 // MARK: - 검색 바
-struct SearchBar: View {
-    @Binding var text: String
+struct EnhancedSearchBar: View {
+    @ObservedObject var searchManager : SearchManager
+    @State private var isEditing = false
     
     var body: some View {
         HStack{
-            Image(systemName: "magnifyingglass")
-                .foregroundColor(.secondary)
-            
-            TextField("인강이나 학원을 검색하세요", text: $text)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-            
-            if !text.isEmpty {
-                Button("취소"){
-                    text = ""
+            HStack{
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.gray)
+                
+                TextField("인강이나 학원을 검색해보세요", text: $searchManager.searchText)
+                    .onTapGesture {
+                        isEditing = true
+                    }
+                
+                if !searchManager.searchText.isEmpty {
+                    Button(action: {
+                        searchManager.clearSearch()
+                    }){
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.gray)
+                    }
                 }
-                .font(.caption)
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(Color(.systemGray6))
+            .cornerRadius(12)
+            
+            if isEditing {
+                Button("취소"){
+                    searchManager.clearSearch()
+                    isEditing = false
+                }
             }
         }
-        .padding(.horizontal)
-        .padding(.top, 8)
     }
 }
 

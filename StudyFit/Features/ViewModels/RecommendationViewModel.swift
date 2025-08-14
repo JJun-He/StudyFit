@@ -5,6 +5,7 @@
 
 
 import Foundation
+import Combine
 
 class RecommendationViewModel: ObservableObject {
     @Published var courses: [Course] = []
@@ -16,6 +17,16 @@ class RecommendationViewModel: ObservableObject {
     @Published var searchText = ""
     @Published var showingFilter = false
     @Published var sortOption: SortOption = .rating
+    
+    // 검색 관련
+    @Published var searchManager = SearchManager()
+    @Published var isSearching = false
+    
+    // 원본 데이터 저장용 (필터링 전 데이터)
+    private var originalCourses: [Course] = []
+    private var originalAcademies: [Academy] = []
+    
+    private var cancellables = Set<AnyCancellable>()
     
     private let recommendationService = RecommendationService()
     
@@ -37,6 +48,18 @@ class RecommendationViewModel: ObservableObject {
     
     init(){
         loadRecommendations()
+        setupSearchObserver()
+    }
+    
+    private func setupSearchObserver() {
+        // 디바운스된 검색어 관찰
+        searchManager.$debouncedSearchText
+            .sink{[weak self] debouncedText in
+                self?.searchText = debouncedText
+                self?.isSearching = !debouncedText.isEmpty
+                self?.applySortAndFilter()
+            }
+            .store(in: &cancellables)
     }
     
     // MARK: - 데이터 로드
@@ -154,6 +177,7 @@ class RecommendationViewModel: ObservableObject {
         selectedDifficulty = nil
         selectedPlatform = nil
         searchText = ""
+        searchManager.clearSearch()
         sortOption = .rating
         applySortAndFilter()
     }
