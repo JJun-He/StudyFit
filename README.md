@@ -37,6 +37,12 @@
 - 추천 상세: 강좌 정보, 찜 버튼
 - 마이페이지: 이전 결과, 저장 목록 확인
 
+<img width="300" height="700" alt="image" src="https://github.com/user-attachments/assets/d30cf4a0-13fd-4056-9ded-c685784dac6e" />
+<img width="300" height="700" alt="image" src="https://github.com/user-attachments/assets/041ba08e-f25a-461f-9517-b2ed0dac46a1" />
+<img width="300" height="700" alt="image" src="https://github.com/user-attachments/assets/86e0547f-7a93-4e6c-9eb0-1f3421bbe356" />
+<img width="300" height="700" alt="image" src="https://github.com/user-attachments/assets/d802751f-1ced-481f-a835-00443063b5cc" />
+<img width="300" height="700" alt="image" src="https://github.com/user-attachments/assets/f01742f2-47a6-4c55-9ec6-94500cb15810" />
+
 ---
 
 🧩 향후 계획
